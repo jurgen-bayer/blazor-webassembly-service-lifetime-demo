@@ -3,7 +3,7 @@
 public class CounterService: ITransientCounterService, IScopedCounterService, ISingletonCounterService
 {
     // Unique ID to identify the service instance
-    public Guid Id { get; } = Guid.NewGuid();
+    public int Id { get; } = IdHelper.GetNextId();
 
     // The current count
     public int Count { get; private set;  }

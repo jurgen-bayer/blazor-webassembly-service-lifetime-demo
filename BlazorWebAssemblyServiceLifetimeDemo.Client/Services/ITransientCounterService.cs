@@ -3,7 +3,7 @@
 public interface ITransientCounterService
 { 
     // Unique ID to identify the service instance
-    Guid Id { get; }
+    int Id { get; }
 
     // The current count
     int Count { get; }
