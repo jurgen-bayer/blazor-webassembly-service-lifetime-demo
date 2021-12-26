@@ -1,0 +1,40 @@
+﻿@using BlazorWebAssemblyServiceLifetimeDemo.Client.Services
+@inject IScopedCounterService scopedCounterService;
+@inject IServiceUsingScopedCounterService serviceUsingScopedCounterService;
+
+<h1>Scoped Services</h1>
+<div class="mt-2 alert alert-info">
+    Note that scoped services currenty (.NET 6) behave like singleton services in a Blazor WebAssembly
+    application.
+</div>
+<div class="alert alert-warning mt-2">
+    Solve the issue with scoped services by using Utility Base Component Classes.
+</div>
+<div class="alert alert-warning mt-2">
+    As with singleton, do not use scoped services for classes derived from Entity Framework's
+    <code>DbContext</code> class. This will lead to issues because the <code>DbContext</code>'s state, hence
+    all change requests, will be preserved. An example is when saving on one component fails and is ignored,
+    and then the user tries to save on another component. The preserved changes from the failed save attempt
+    will again lead to an exception.
+</div>
+@if (@ScopedServicesResult != null)
+{
+    <div class="mt-2">
+        Current count directly from counter service: @ScopedServicesResult.CountDirectlyFromCounterService
+    </div>
+    <div class="mt-2">
+        Current count from demo service: @ScopedServicesResult.CountFromDemoServiceUsingCounterService
+    </div>
+    <div class="mt-2">
+        Counter service ID: @ScopedServicesResult.CounterServiceId
+    </div>
+    <div class="mt-2">
+        Demo service ID: @ScopedServicesResult.DemoServiceId
+    </div>
+    <div class="mt-2">
+        Counter service ID in demo service: @ScopedServicesResult.DemoServiceCounterServiceId
+    </div>
+}
+<div class="mt-2">
+    <button class="btn btn-primary" onclick="@IncreaseScopedServiceCount">Increase Count</button>
+</div>

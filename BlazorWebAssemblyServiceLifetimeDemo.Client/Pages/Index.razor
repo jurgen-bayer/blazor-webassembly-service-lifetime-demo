@@ -1,146 +1,18 @@
 ﻿@page "/"
-@using BlazorWebAssemblyServiceLifetimeDemo.Client.Services
-
-@inject ITransientCounterService transientCounterService;
-@inject IScopedCounterService scopedCounterService;
-@inject ISingletonCounterService singletonCounterService;
-@inject IServiceUsingTransientCounterService serviceUsingTransientCounterService;
-@inject IServiceUsingScopedCounterService serviceUsingScopedCounterService;
-@inject IServiceUsingSingletonCounterService serviceUsingSingletonCounterService;
+@using BlazorWebAssemblyServiceLifetimeDemo.Client.Shared;
 
 <PageTitle>Blazor WebAssembly Service Lifetime Demo - Home</PageTitle>
 
 <div class="container">
     <div class="mt-5">
-        <h1>Transient Services</h1>
-        <div class="mt-2">
-            <div>
-                Increasing the count in the transient counter service does only increase the count in the instance
-                directly injected into this component. As long as the component stays in memory, usually because the
-                user stays on the page, the same service instance is used. Therefore state is preserved as long as
-                the component lives.
-            </div>
-            <div>
-                However, if the user navigates to another page (for example to
-                <NavLink href="About" Match="NavLinkMatch.All">About</NavLink>) and back, a new instance of the
-                transient service is injected, hence all state gets lost.
-            </div>
-            <div>
-                The instance of the service using the transient counter service, that also gets a transient
-                instance of the counter service passed, returns 0 always from it's <code>GetCount</code> method, because it
-                gets a different counter service instance passed.
-            </div>
-        </div>
-        <div class="alert alert-info mt-2">
-            This lifetime works best for lightweight, stateless services, or to preserve state as long as a component
-            is in memory.
-        </div>
-        @if (@TransientServicesResult != null)
-        {
-            <div class="mt-2">
-                Current count directly from counter service: @TransientServicesResult.CountDirectlyFromCounterService
-            </div>
-            <div class="mt-2">
-                Current count from demo service: @TransientServicesResult.CountFromDemoServiceUsingCounterService
-            </div>
-            <div class="mt-2">
-                Counter service ID: @TransientServicesResult.CounterServiceId
-            </div>
-            <div class="mt-2">
-                Demo service ID: @TransientServicesResult.DemoServiceId
-            </div>
-            <div class="mt-2">
-                Counter service ID in demo service: @TransientServicesResult.DemoServiceCounterServiceId
-            </div>
-        }
-        <div class="mt-2">
-            <button class="btn btn-primary" onclick="@IncreaseTransientServiceCount">Increase Count</button>
-        </div>
+        <ComponentUsingTransientServices></ComponentUsingTransientServices>
     </div>
 
     <div class="mt-5">
-        <h1>Scoped Services</h1>
-        <div class="mt-2 alert alert-info">
-            Note that scoped services currenty (.NET 6) behave like singleton services in a Blazor WebAssembly
-            application.
-        </div>
-        <div class="alert alert-warning mt-2">
-            As with singleton, do not use scoped services for classes derived from Entity Framework's 
-            <code>DbContext</code> class. This will lead to issues because the <code>DbContext</code>'s state, hence
-            all change requests, will be preserved. An example is when saving on one component fails and is ignored, 
-            and then the user tries to save on another component. The preserved changes from the failed save attempt
-            will again lead to an exception.
-        </div>        
-        @if (@ScopedServicesResult != null)
-        {
-            <div class="mt-2">
-                Current count directly from counter service: @ScopedServicesResult.CountDirectlyFromCounterService
-            </div>
-            <div class="mt-2">
-                Current count from demo service: @ScopedServicesResult.CountFromDemoServiceUsingCounterService
-            </div>
-            <div class="mt-2">
-                Counter service ID: @ScopedServicesResult.CounterServiceId
-            </div>
-            <div class="mt-2">
-                Demo service ID: @ScopedServicesResult.DemoServiceId
-            </div>
-            <div class="mt-2">
-                Counter service ID in demo service: @ScopedServicesResult.DemoServiceCounterServiceId
-            </div>
-        }
-        <div class="mt-2">
-            <button class="btn btn-primary" onclick="@IncreaseScopedServiceCount">Increase Count</button>
-        </div>
+        <ComponentUsingScopedServices></ComponentUsingScopedServices>
     </div>
 
     <div class="mt-5">
-        <h1 id="singleton">Singleton Services</h1>
-        <div class="mt-2">
-            <div>
-                Increasing the count in the singleton counter service does increase the count any time the
-                <code>Increase</code> method is called.
-                Because the application stores only one instance and does not destroy it until it's stopped or recycled,
-                the counter service returns the increased count. This counts for all requests from all clients!
-                The service using the singleton counter service of course now also returns the same count via
-                it's <code>GetCount</code> method.
-            </div>
-            <div class="alert alert-info mt-2">
-                Singleton service instances are useful for services that are expensive to instantiate. You should not use
-                singleton service instances to share state between requests.
-            </div>
-            <div class="alert alert-warning mt-2">
-                Note however that when the application's is reloaded in the browser, all singleton service instances 
-                get destroyed, hence all state gets lost.
-            </div>
-            <div class="alert alert-warning mt-2">
-                Do not use singleton services for classes derived from Entity Framework's <code>DbContext</code>
-                class. This will lead to issues because the <code>DbContext</code>'s state, hence all change requests,
-                will be preserved. An example is when saving on one component fails and is ignored, and then the user
-                tries to save on another component. The preserved changes from the failed save attempt will again lead
-                to an exception.
-            </div>
-        </div>
-        @if (@SingletonServicesResult != null)
-        {
-            <div class="mt-2">
-                Current count directly from counter service: @SingletonServicesResult.CountDirectlyFromCounterService
-            </div>
-            <div class="mt-2">
-                Current Count from demo service: @SingletonServicesResult.CountFromDemoServiceUsingCounterService
-            </div>
-            <div class="mt-2">
-                Counter Service ID: @SingletonServicesResult.CounterServiceId
-            </div>
-            <div class="mt-2">
-                Demo service ID: @SingletonServicesResult.DemoServiceId
-            </div>
-            <div class="mt-2">
-                Counter Service ID in demo service: @SingletonServicesResult.DemoServiceCounterServiceId
-            </div>
-        }
-        <div class="mt-2">
-            <button class="btn btn-primary" onclick="@IncreaseSingletonServiceCount">Increase Count</button>
-        </div>
+        <ComponentUsingSingletonServices></ComponentUsingSingletonServices>
     </div>
 </div>

@@ -1,0 +1,48 @@
+﻿@using BlazorWebAssemblyServiceLifetimeDemo.Client.Services
+@inject ITransientCounterService transientCounterService;
+@inject IServiceUsingTransientCounterService serviceUsingTransientCounterService;
+
+<h1>Transient Services</h1>
+<div class="mt-2">
+    <div>
+        Increasing the count in the transient counter service does only increase the count in the instance
+        directly injected into this component. As long as the component stays in memory, usually because the
+        user stays on the page, the same service instance is used. Therefore state is preserved as long as
+        the component lives.
+    </div>
+    <div>
+        However, if the user navigates to another page (for example to
+        <NavLink href="About" Match="NavLinkMatch.All">About</NavLink>) and back, a new instance of the
+        transient service is injected, hence all state gets lost.
+    </div>
+    <div>
+        The instance of the service using the transient counter service, that also gets a transient
+        instance of the counter service passed, returns 0 always from it's <code>GetCount</code> method, because it
+        gets a different counter service instance passed.
+    </div>
+</div>
+<div class="alert alert-info mt-2">
+    This lifetime works best for lightweight, stateless services, or to preserve state as long as a component
+    is in memory.
+</div>
+@if (@TransientServicesResult != null)
+{
+    <div class="mt-2">
+        Current count directly from counter service: @TransientServicesResult.CountDirectlyFromCounterService
+    </div>
+    <div class="mt-2">
+        Current count from demo service: @TransientServicesResult.CountFromDemoServiceUsingCounterService
+    </div>
+    <div class="mt-2">
+        Counter service ID: @TransientServicesResult.CounterServiceId
+    </div>
+    <div class="mt-2">
+        Demo service ID: @TransientServicesResult.DemoServiceId
+    </div>
+    <div class="mt-2">
+        Counter service ID in demo service: @TransientServicesResult.DemoServiceCounterServiceId
+    </div>
+}
+<div class="mt-2">
+    <button class="btn btn-primary" onclick="@IncreaseTransientServiceCount">Increase Count</button>
+</div>

@@ -1,0 +1,51 @@
+﻿@using BlazorWebAssemblyServiceLifetimeDemo.Client.Services
+@inject ISingletonCounterService singletonCounterService;
+@inject IServiceUsingSingletonCounterService serviceUsingSingletonCounterService;
+
+<h1 id="singleton">Singleton Services</h1>
+<div class="mt-2">
+    <div>
+        Increasing the count in the singleton counter service does increase the count any time the
+        <code>Increase</code> method is called.
+        Because the application stores only one instance and does not destroy it until it's closed or reloaded
+        in the browser, the counter service returns the increased count as long as the application lives.
+        The service using the singleton counter service of course now also returns the same count via
+        it's <code>GetCount</code> method.
+    </div>
+    <div class="alert alert-info mt-2">
+        Singleton service instances are useful for services that are expensive to instantiate, or if state
+        needs to be shared within the application instance.
+    </div>
+    <div class="alert alert-warning mt-2">
+        Note however that - contrary to singleton services in ASP.NET - when the application's is reloaded in
+        the browser, all singleton service instances get destroyed, hence all state gets lost.
+    </div>
+    <div class="alert alert-warning mt-2">
+        Do not use singleton services for classes derived from Entity Framework's <code>DbContext</code>
+        class. This will lead to issues because the <code>DbContext</code>'s state, hence all change requests,
+        will be preserved. An example is when saving on one component fails and is ignored, and then the user
+        tries to save on another component. The preserved changes from the failed save attempt will again lead
+        to an exception.
+    </div>
+</div>
+@if (@SingletonServicesResult != null)
+{
+    <div class="mt-2">
+        Current count directly from counter service: @SingletonServicesResult.CountDirectlyFromCounterService
+    </div>
+    <div class="mt-2">
+        Current Count from demo service: @SingletonServicesResult.CountFromDemoServiceUsingCounterService
+    </div>
+    <div class="mt-2">
+        Counter Service ID: @SingletonServicesResult.CounterServiceId
+    </div>
+    <div class="mt-2">
+        Demo service ID: @SingletonServicesResult.DemoServiceId
+    </div>
+    <div class="mt-2">
+        Counter Service ID in demo service: @SingletonServicesResult.DemoServiceCounterServiceId
+    </div>
+}
+<div class="mt-2">
+    <button class="btn btn-primary" onclick="@IncreaseSingletonServiceCount">Increase Count</button>
+</div>
