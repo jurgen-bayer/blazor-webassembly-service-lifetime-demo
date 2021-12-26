@@ -36,5 +36,4 @@ public partial class ComponentUsingScopedServices
             DemoServiceCounterServiceId = this.serviceUsingScopedCounterService.CounterServiceId
         };
     }
-
 }

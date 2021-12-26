@@ -1,0 +1,29 @@
+﻿@inherits OwningComponentBase;
+
+<h1>Utility Base Component using the Scoped Services</h1>
+
+<div class="mt-2 alert alert-info">
+    Utility base component classes solve the issue with the scoped lifetime by scoping it to the component and it's
+    lifetime.
+</div>
+@if (@ScopedServicesResult != null)
+{
+    <div class="mt-2">
+        Current count directly from counter service: @ScopedServicesResult.CountDirectlyFromCounterService
+    </div>
+    <div class="mt-2">
+        Current count from demo service: @ScopedServicesResult.CountFromDemoServiceUsingCounterService
+    </div>
+    <div class="mt-2">
+        Counter service ID: @ScopedServicesResult.CounterServiceId
+    </div>
+    <div class="mt-2">
+        Demo service ID: @ScopedServicesResult.DemoServiceId
+    </div>
+    <div class="mt-2">
+        Counter service ID in demo service: @ScopedServicesResult.DemoServiceCounterServiceId
+    </div>
+}
+<div class="mt-2">
+    <button class="btn btn-primary" onclick="@IncreaseScopedServiceCount">Increase Count</button>
+</div>
