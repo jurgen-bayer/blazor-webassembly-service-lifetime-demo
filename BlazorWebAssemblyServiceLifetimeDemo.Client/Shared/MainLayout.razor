@@ -1,0 +1,42 @@
+@using BlazorWebAssemblyServiceLifetimeDemo.Client.Services
+@inherits LayoutComponentBase
+@inject ITransientCounterService transientCounterService;
+@inject IScopedCounterService scopedCounterService;
+@inject ISingletonCounterService singletonCounterService;
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu/>
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <div>
+                <div>
+                    Transient counter service ID: @transientCounterService.Id
+                </div>
+                <div>
+                    Transient counter service count: @transientCounterService.Count
+                </div>
+            </div>
+
+            <div>
+                <div>Scoped counter service ID: @scopedCounterService.Id</div>
+                <div>Scoped counter service count: @scopedCounterService.Count</div>
+            </div>
+
+            <div>
+                <div>
+                    Singleton counter service ID: @singletonCounterService.Id
+                </div>
+                <div>
+                    Singleton counter service count: @singletonCounterService.Count
+                </div>
+            </div>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
